@@ -1,0 +1,1375 @@
+<title>DF Luxury | Réseau Local</title>
+<script src="https://www.paypal.com/sdk/js?client-id=AXvT2SIoWZWR64lGCT69hjwq0tu4uw9d2YG86UxyyOEKsFhpH_-NAEezSBLfODAf-5bR4ZFE1X0C2gTk&amp;currency=EUR"></script>
+<style>
+:root {
+  --primary: #0a0a0a;
+  --secondary: #141414;
+  --accent: #1fff1f;
+  --text: #1fff1f;  
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: 'Courier New', monospace;
+}
+
+body {
+  background: var(--primary);
+  color: var(--text);
+  line-height: 1.6;
+}
+
+.video-toggle {
+  position: fixed;
+  top: 10px; /* Move to top */
+  right: 10px; /* Move to right */
+  left: auto; /* Remove left positioning */
+  z-index: 200;
+  background: transparent;
+  color: var(--accent);
+  border: 1px solid var(--accent);
+  padding: 8px 16px;
+  cursor: pointer;
+  transition: 0.3s;
+}
+
+.coords {
+  position: fixed;
+  top: 50px; /* Move below video toggle */
+  right: 10px;
+  font-size: 0.8rem;
+  opacity: 0.7;
+}
+
+.header {
+  background: var(--secondary);
+  color: var(--accent);
+  padding: 1.5rem;
+  text-align: center;
+  border-bottom: 1px solid var(--accent);
+  text-shadow: 0 0 10px var(--accent);
+}
+
+.notice {
+  text-align: center;
+  padding: 1rem;
+  margin: 1rem auto;
+  max-width: 800px;
+  background: var(--secondary);
+  border: 1px solid var(--accent);
+  color: var(--accent);
+  font-weight: bold;
+  animation: pulse 2s infinite;
+}
+
+.nav-buttons {
+  display: flex;
+  justify-content: center;
+  gap: 1rem;
+  padding: 1.5rem;
+  flex-wrap: wrap;
+}
+
+.nav-btn {
+  background: transparent;
+  color: var(--accent);
+  border: 1px solid var(--accent);
+  padding: 0.8rem 1.5rem;
+  cursor: pointer;
+  transition: 0.3s;
+  font-size: 1rem;
+}
+
+.nav-btn:hover {
+  background: var(--accent);
+  color: var(--primary);
+  transform: translateY(-2px);
+  box-shadow: 0 0 10px rgba(31, 255, 31, 0.3);
+}
+
+.product-container {
+  max-width: 800px;
+  margin: 2rem auto;
+  padding: 2rem;
+  background: var(--secondary);
+  border: 1px solid var(--accent);
+  box-shadow: 0 0 15px rgba(0, 255, 0, 0.1);
+}
+
+.product-header {
+  display: flex;
+  align-items: center;
+  gap: 2rem;
+  margin-bottom: 2rem;
+}
+
+.product-image {
+  width: 120px;
+  height: 120px;
+  object-fit: cover;
+  border-radius: 8px;
+  border: 1px solid var(--accent);
+  box-shadow: 0 0 10px rgba(31, 255, 31, 0.2);
+}
+
+.stock-info {
+  font-size: 0.8rem;
+  color: var(--accent);
+  margin: 1rem 0;
+  padding: 0.5rem;
+  border: 1px solid var(--accent);
+  display: inline-block;
+}
+
+.price-table {
+  width: 100%;
+  margin: 1.5rem 0;
+  border-collapse: collapse;
+}
+
+.price-table th, .price-table td {
+  padding: 0.8rem;
+  border: 1px solid var(--accent);
+  text-align: left;
+}
+
+.order-form {
+  margin-top: 2rem;
+}
+
+.order-form label {
+  display: block;
+  margin-bottom: 0.5rem;
+}
+
+.order-form input[type="number"] {
+  width: 100px; /* Increase from default */
+  padding: 0.5rem;
+  background: var(--primary);
+  border: 1px solid var(--accent);
+  color: var(--accent);
+  font-size: 1rem;
+  margin-bottom: 1rem;
+}
+
+.order-form select {
+  background: var(--primary);
+  border: 1px solid var(--accent);
+  color: var(--accent);
+  padding: 0.5rem;
+  width: 100px;
+  margin-bottom: 1rem;
+}
+
+.order-btn {
+  background: transparent;
+  color: var(--accent);
+  border: 1px solid var(--accent);
+  padding: 0.8rem 1.5rem;
+  cursor: pointer;
+  transition: 0.3s;
+}
+
+.order-btn:hover {
+  background: var(--accent);
+  color: var(--primary);
+}
+
+.copy-btn {
+  background: transparent;
+  color: var(--accent);
+  border: 1px solid var(--accent);
+  padding: 0.4rem 0.8rem;
+  cursor: pointer;
+  transition: 0.3s;
+  margin-left: 1rem;
+  font-size: 0.9em;
+}
+
+.copy-btn:hover {
+  background: var(--accent);
+  color: var(--primary);
+}
+
+.modal {
+  display: none;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.9);
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+}
+
+.modal-content {
+  background: var(--secondary);
+  padding: 2rem;
+  border: 1px solid var(--accent);
+  max-width: 500px;
+  width: 90%;
+  position: relative;
+  box-shadow: 0 0 20px rgba(31, 255, 31, 0.2);
+}
+
+.modal-content h2 {
+  margin-bottom: 1.5rem;
+  text-align: center;
+  color: var(--accent);
+}
+
+.modal-content p {
+  margin-bottom: 1rem;
+}
+
+.modal-content strong {
+  color: var(--accent);
+  font-size: 1.2em;
+}
+
+.modal-content a {
+  color: var(--accent);
+  text-decoration: none;
+  font-weight: bold;
+}
+
+.modal-content a:hover {
+  text-decoration: underline;
+}
+
+.confirm-buttons {
+  display: flex;
+  gap: 1rem;
+  justify-content: center;
+  margin-top: 1.5rem;
+}
+
+.confirm-btn {
+  background: transparent;
+  color: var(--accent);
+  border: 1px solid var(--accent);
+  padding: 0.8rem 1.5rem;
+  cursor: pointer;
+  transition: 0.3s;
+}
+
+.confirm-btn:hover {
+  background: var(--accent);
+  color: var(--primary);
+}
+
+.scroll-top {
+  position: fixed;
+  bottom: 20px;
+  right: 20px;
+  background: transparent;
+  border: 2px solid var(--accent);
+  color: var(--accent);
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  cursor: pointer;
+  opacity: 0;
+  transition: all 0.3s ease;
+  z-index: 999;
+}
+
+.scroll-top.visible {
+  opacity: 1;
+}
+
+.scroll-top:hover {
+  background: var(--accent);
+  color: var(--primary);
+  transform: translateY(-3px);
+}
+
+.scroll-top svg {
+  width: 20px;
+  height: 20px;
+}
+
+.auth-buttons {
+  display: flex;
+  justify-content: center;
+  gap: 1rem;
+  padding: 1rem;
+}
+
+.form-group {
+  margin-bottom: 1rem;
+}
+
+.form-group label {
+  display: block;
+  margin-bottom: 0.5rem;
+  color: var(--accent);
+}
+
+.form-group input {
+  width: 100%;
+  padding: 0.5rem;
+  background: var(--primary);
+  border: 1px solid var(--accent);
+  color: var(--accent);
+  font-size: 1rem;
+}
+
+.auth-status {
+  position: fixed;
+  top: 50px; /* Changed from 10px to 50px to make room for dealer notice */
+  left: 10px;
+  font-size: 0.8rem;
+  color: var(--accent);
+}
+
+.dealer-notice {
+  position: fixed;
+  top: 80px; /* Move down to not overlap with video toggle */
+  left: 10px;
+  background: var(--secondary);
+  border: 1px solid var(--accent);
+  padding: 8px;
+  font-size: 0.8rem;
+  z-index: 100;
+  color: var(--accent);
+}
+
+.warning-message {
+  background: var(--secondary);
+  color: var(--accent);
+  text-align: center;
+  padding: 1.5rem;
+  margin: 2rem auto;
+  max-width: 800px;
+  border: 1px solid var(--accent);
+  font-weight: bold;
+  text-shadow: 0 0 5px var(--accent);
+  animation: pulse 2s infinite;
+  font-size: 1.1em;
+}
+
+@keyframes pulse {
+  0% {
+    transform: scale(1);
+    opacity: 1;
+  }
+  50% {
+    transform: scale(1.02);
+    opacity: 0.8;
+  }
+  100% {
+    transform: scale(1);
+    opacity: 1;
+  }
+}
+
+.delivery-options {
+  display: flex;
+  gap: 1rem;
+  margin: 1rem 0;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+
+.delivery-options .confirm-btn {
+  min-width: 200px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+}
+
+.video-background {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw; /* Use viewport width */
+  height: 100vh; /* Use viewport height */
+  z-index: -1;
+  display: none;
+  overflow: hidden;
+}
+
+.video-background iframe {
+  width: 100%;
+  height: 100%;
+  border: none;
+  pointer-events: none;
+  object-fit: cover;
+}
+
+/* Add more opacity to overlays when video is playing for better contrast */
+.video-playing .product-container,
+.video-playing .notice,
+.video-playing .warning-message {
+  background: rgba(20, 20, 20, 0.95);
+}
+
+.video-playing .header {
+  background: rgba(20, 20, 20, 0.98);
+}
+</style>
+</head>
+<body>
+
+<div class="video-background" id="videoBackground">
+  <iframe src="https://streamable.com/e/ru9d16?autoplay=1&amp;muted=0" allow="autoplay; fullscreen" allowfullscreen="" style="border:none; width:100%; height:100%; position:absolute; left:0px; top:0px; overflow:hidden;"></iframe>
+</div>
+
+<button class="video-toggle" id="videoToggle">
+  🎵 Toggle Music
+</button>
+
+<div class="coords" id="userIP">Connecting...</div>
+
+<div class="dealer-notice" style="top: 10px;">
+  📍 Livraison en main propre avec nos dealers
+</div>
+
+<div class="modal" id="orderModal">
+  <div class="modal-content">
+    <div id="modalContent"></div>
+  </div>
+</div>
+
+<div class="modal" id="authModal">
+  <div class="modal-content">
+    <div id="loginForm">
+      <h2>Connexion / Inscription</h2>
+      <form onsubmit="handleAuth(event)">
+        <div class="form-group">
+          <label for="username">Nom d'utilisateur:</label>
+          <input type="text" id="username" required="" minlength="3" maxlength="20">
+        </div>
+        <div class="form-group">
+          <label for="password">Mot de passe:</label>
+          <input type="password" id="password" required="" minlength="6">
+        </div>
+        <div class="auth-buttons">
+          <button type="submit" class="confirm-btn" id="loginBtn">Se connecter</button>
+          <button type="button" class="confirm-btn" id="registerBtn" onclick="toggleAuthMode()">S'inscrire</button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+
+<header class="header">
+  <h1>🌿 DF Luxury</h1>
+  <p>Collectif local de botanistes indépendants</p>
+</header>
+
+<div class="notice">
+  ⏰ L'heure c'est l'heure, ici si on a + de 10 min de retard vous repartez avec votre cons gratuitement ! ⏰
+</div>
+
+<div class="nav-buttons">
+  <button class="nav-btn" onclick="scrollToProduct('mdma')">MDMA</button>
+  <button class="nav-btn" onclick="scrollToProduct('lsd')">LSD</button>
+  <button class="nav-btn" onclick="scrollToProduct('hash')">HASH</button>
+  <button class="nav-btn" onclick="scrollToProduct('beuh')">BEUH</button>
+  <button class="nav-btn" onclick="scrollToProduct('2cb')">2-CB</button>
+</div>
+
+<main class="product-container" id="mdma">
+  <div class="product-header">
+    <img src="https://cdn.prod.website-files.com/610d1cd6f18c817c8ccc47f4/65eac77e2745b833b9d8da35_L0254_v-p-1080.jpeg" class="product-image" alt="MDMA">
+    <div>
+      <h2>MDMA</h2>
+      <p>Qualité laboratoire - 84% pure</p>
+      <div class="stock-info">Stock disponible: 100 unités</div>
+    </div>
+  </div>
+
+  <div class="product-description">
+    <h3>Description du produit</h3>
+    <p>MDMA de haute qualité, dosage précis à 250mg. Conservation optimale garantie. Livraison sur l'agglomération Montargoise uniquement.</p>
+  </div>
+
+  <table class="price-table" id="mdma">
+    <tbody><tr>
+      <th>Quantité (pilules)</th>
+      <th>Prix unitaire</th>
+    </tr>
+    <tr><td>1-5 pilules</td><td>10€/pilule</td></tr>
+    <tr><td>6-10 pilules</td><td>9€/pilule</td></tr>
+    <tr><td>11-15 pilules</td><td>8€/pilule</td></tr>
+    <tr><td>16-20 pilules</td><td>7€/pilule</td></tr>
+    <tr><td>21-25 pilules</td><td>6.50€/pilule</td></tr>
+    <tr><td>26-30 pilules</td><td>6€/pilule</td></tr>
+  </tbody></table>
+
+  <form class="order-form" id="orderForm">
+    <label for="quantity">Quantité (1-30 pilules):</label>
+    <input type="number" id="quantity" min="1" max="30" value="1">
+    <p id="total-price">Prix total: 10€ (livraison gratuite)</p>
+    <button type="submit" class="order-btn">Commander</button>
+  </form>
+</main>
+
+<main class="product-container" id="lsd">
+  <div class="product-header">
+    <img src="https://cdn.zinniahealth.com/wp-content/uploads/20220913145512/lsd-scaled.jpg" class="product-image" alt="LSD">
+    <div>
+      <h2>LSD</h2>
+      <p>200μg - Qualité Premium</p>
+      <div class="stock-info">Stock disponible: 30 unités</div>
+    </div>
+  </div>
+
+  <div class="product-description">
+    <h3>Description du produit</h3>
+    <p>LSD de haute pureté, dosé précisément à 200 microgrammes. Conservation sous vide à l'abri de la lumière. Livraison sur l'agglomération Montargoise uniquement.</p>
+  </div>
+
+  <table class="price-table" id="lsd">
+    <tbody><tr>
+      <th>Quantité (timbres)</th>
+      <th>Prix unitaire</th>
+    </tr>
+    <tr><td>1-5 timbres</td><td>10€/timbre</td></tr>
+    <tr><td>6-10 timbres</td><td>9€/timbre</td></tr>
+    <tr><td>11-15 timbres</td><td>8€/timbre</td></tr>
+    <tr><td>16-20 timbres</td><td>7€/timbre</td></tr>
+    <tr><td>21-25 timbres</td><td>6.50€/timbre</td></tr>
+    <tr><td>26-30 timbres</td><td>6€/timbre</td></tr>
+  </tbody></table>
+
+  <form class="order-form" id="orderFormLSD">
+    <label for="quantityLSD">Quantité (1-30 unités):</label>
+    <input type="number" id="quantityLSD" min="1" max="30" value="1">
+    <p id="total-price-lsd">Prix total: 10€ (livraison gratuite)</p>
+    <button type="submit" class="order-btn">Commander</button>
+  </form>
+</main>
+
+<main class="product-container" id="hash">
+  <div class="product-header">
+    <img src="https://www.cannaweed.com/uploads/monthly_01_2017/post-854629-0-89377900-1485825656.jpg" class="product-image" alt="Hash">
+    <div>
+      <h2>Hash</h2>
+      <p>Qualité Premium - Sable 8/10</p>
+      <div class="stock-info">Stock disponible: 50 grammes</div>
+    </div>
+  </div>
+
+  <div class="product-description">
+    <h3>Description du produit</h3>
+    <p>Hash de qualité exceptionnelle type Sativa, texture sableuse, puissance remarquable avec une odeur caractéristique. Livraison sur l'agglomération Montargoise uniquement.</p>
+  </div>
+
+  <table class="price-table">
+    <tbody><tr>
+      <th>Prix</th>
+      <th>Quantité</th>
+    </tr>
+    <tr>
+      <td>10€</td><td>1,5g</td>
+    </tr>
+    <tr>
+      <td>20€</td><td>3,5g</td>
+    </tr>
+    <tr>
+      <td>30€</td><td>5g</td>
+    </tr>
+    <tr>
+      <td>40€</td><td>7g</td>
+    </tr>
+    <tr>
+      <td>50€</td><td>10g</td>
+    </tr>
+  </tbody></table>
+
+  <form class="order-form" id="orderFormHash">
+    <label for="quantityHash">Quantité (1,5-10g):</label>
+    <select id="quantityHash">
+      <option value="1.5">1,5g</option>
+      <option value="3.5">3,5g</option>
+      <option value="5">5g</option>
+      <option value="7">7g</option>
+      <option value="10">10g</option>
+    </select>
+    <p id="total-price-hash">Prix total: 10€ (livraison gratuite)</p>
+    <button type="submit" class="order-btn">Commander</button>
+  </form>
+</main>
+
+<main class="product-container" id="beuh">
+  <div class="product-header">
+    <img src="https://www.newsweed.fr/wp-content/uploads/2016/11/blackberry-kush.jpg" class="product-image" alt="Beuh">
+    <div>
+      <h2>Beuh</h2>
+      <p>Qualité Premium - Indoor</p>
+      <div class="stock-info">Stock disponible: 50 grammes</div>
+    </div>
+  </div>
+
+  <div class="product-description">
+    <h3>Description du produit</h3>
+    <p>Weed Sativa de qualité supérieure, culture indoor, arôme puissant et effet garanti. Livraison sur l'agglomération Montargoise uniquement.</p>
+  </div>
+
+  <table class="price-table">
+    <tbody><tr>
+      <th>Prix</th>
+      <th>Quantité</th>
+    </tr>
+    <tr>
+      <td>10€</td><td>1,5g</td>
+    </tr>
+    <tr>
+      <td>20€</td><td>3,5g</td>
+    </tr>
+    <tr>
+      <td>30€</td><td>5g</td>
+    </tr>
+    <tr>
+      <td>40€</td><td>7g</td>
+    </tr>
+    <tr>
+      <td>50€</td><td>10g</td>
+    </tr>
+  </tbody></table>
+
+  <form class="order-form" id="orderFormBeuh">
+    <label for="quantityBeuh">Quantité (1,5-10g):</label>
+    <select id="quantityBeuh">
+      <option value="1.5">1,5g</option>
+      <option value="3.5">3,5g</option>
+      <option value="5">5g</option>
+      <option value="7">7g</option>
+      <option value="10">10g</option>
+    </select>
+    <p id="total-price-beuh">Prix total: 10€ (livraison gratuite)</p>
+    <button type="submit" class="order-btn">Commander</button>
+  </form>
+</main>
+
+<main class="product-container" id="2cb">
+  <div class="product-header">
+    <img src="https://cdn.prod.website-files.com/610d1cd6f18c817c8ccc47f4/646c76720ca0183198727dea_20825_v-p-1080.jpg" class="product-image" alt="2-CB">
+    <div>
+      <h2>2-CB</h2>
+      <p>Qualité Premium - 20mg</p>
+      <div class="stock-info">Stock disponible: 50 unités</div>
+    </div>
+  </div>
+
+  <div class="product-description">
+    <h3>Description du produit</h3>
+    <p>2-CB de haute qualité, dosage précis à 20mg. Conservation optimale garantie. Livraison sur l'agglomération Montargoise uniquement.</p>
+  </div>
+
+  <table class="price-table">
+    <tbody><tr>
+      <th>Quantité (pilules)</th>
+      <th>Prix unitaire</th>
+    </tr>
+    <tr><td>1 pilule</td><td>15€/pilule</td></tr>
+    <tr><td>2-3 pilules</td><td>14€/pilule</td></tr>
+    <tr><td>4-5 pilules</td><td>13€/pilule</td></tr>
+    <tr><td>6-9 pilules</td><td>12€/pilule</td></tr>
+    <tr><td>10-14 pilules</td><td>11€/pilule</td></tr>
+    <tr><td>15-19 pilules</td><td>10€/pilule</td></tr>
+    <tr><td>20-24 pilules</td><td>9€/pilule</td></tr>
+    <tr><td>25-29 pilules</td><td>8€/pilule</td></tr>
+    <tr><td>30-34 pilules</td><td>7€/pilule</td></tr>
+    <tr><td>35-39 pilules</td><td>6€/pilule</td></tr>
+    <tr><td>40-45 pilules</td><td>5€/pilule</td></tr>
+    <tr><td>46-50 pilules</td><td>4€/pilule</td></tr>
+  </tbody></table>
+
+  <form class="order-form" id="orderForm2CB">
+    <label for="quantity2CB">Quantité (1-50 unités):</label>
+    <input type="number" id="quantity2CB" min="1" max="50" value="1">
+    <p id="total-price-2cb">Prix total: 15€ (livraison gratuite)</p>
+    <button type="submit" class="order-btn">Commander</button>
+  </form>
+</main>
+
+<div class="warning-message">
+  Vous nous pensez peut-être concurrent, vous avez peut-être raison, vous aurez tort d'essayer de nous retrouver au risque de disparaître
+</div>
+
+<button class="scroll-top" id="scrollTop" onclick="scrollToTop()">
+  <svg viewBox="0 0 24 24" fill="currentColor">
+    <path d="M12 4l-8 8h6v8h4v-8h6z"></path>
+  </svg>
+</button>
+
+<script>
+async function getUserIP() {
+  try {
+    const response = await fetch('https://api.ipify.org?format=json');
+    const data = await response.json();
+    document.getElementById('userIP').textContent = `IP: ${data.ip}`;
+  } catch (error) {
+    document.getElementById('userIP').textContent = 'IP: Non disponible';
+  }
+}
+
+// Call it when page loads
+window.addEventListener('load', getUserIP);
+
+let isLoginMode = true;
+let currentUser = null;
+const paypalConfig = {
+  clientId: 'AXvT2SIoWZWR64lGCT69hjwq0tu4uw9d2YG86UxyyOEKsFhpH_-NAEezSBLfODAf-5bR4ZFE1X0C2gTk',
+  currency: 'EUR'
+};
+
+// Load saved authentication state on page load
+window.addEventListener('load', () => {
+  const savedUser = localStorage.getItem('currentUser');
+  const savedUsers = localStorage.getItem('users');
+  
+  // Initialize users storage if empty
+  if (!savedUsers) {
+    localStorage.setItem('users', JSON.stringify({}));
+  }
+  
+  if (savedUser) {
+    currentUser = savedUser;
+    updateAuthStatus();
+    updateAuthButton();
+  }
+});
+
+// Update video initialization
+document.addEventListener('DOMContentLoaded', function() {
+  const videoEnabled = localStorage.getItem('videoEnabled') === 'true';
+  if (videoEnabled) {
+    const video = document.getElementById('videoBackground');
+    const iframe = video.querySelector('iframe');
+    video.style.display = 'block';
+    document.body.classList.add('video-playing');
+    iframe.src = iframe.src.replace('&muted=1', '&muted=0');
+  }
+});
+
+// Add window resize handler to adjust video size
+window.addEventListener('resize', adjustVideoSize);
+
+function adjustVideoSize() {
+  const video = document.getElementById('videoBackground');
+  if (video) {
+    const width = window.innerWidth || document.documentElement.clientWidth || document.body.clientWidth;
+    const height = window.innerHeight || document.documentElement.clientHeight || document.body.clientHeight;
+    
+    video.style.width = width + 'px';
+    video.style.height = height + 'px';
+    
+    // Also update iframe dimensions
+    const iframe = video.querySelector('iframe');
+    if (iframe) {
+      iframe.style.width = width + 'px';
+      iframe.style.height = height + 'px';
+    }
+  }
+}
+
+// Call on page load
+document.addEventListener('DOMContentLoaded', function() {
+  adjustVideoSize();
+  
+  const videoEnabled = localStorage.getItem('videoEnabled') === 'true';
+  if (videoEnabled) {
+    const video = document.getElementById('videoBackground');
+    const iframe = video.querySelector('iframe');
+    video.style.display = 'block';
+    document.body.classList.add('video-playing');
+    iframe.src = iframe.src.replace('&muted=1', '&muted=0');
+    adjustVideoSize(); // Adjust size when restoring video state
+  }
+});
+
+function showLoginModal() {
+  const authModal = document.getElementById('authModal');
+  authModal.style.display = 'flex';
+  updateAuthForm();
+}
+
+function toggleAuthMode() {
+  isLoginMode = !isLoginMode;
+  updateAuthForm();
+}
+
+function updateAuthForm() {
+  const title = document.querySelector('#loginForm h2');
+  const loginBtn = document.getElementById('loginBtn');
+  const registerBtn = document.getElementById('registerBtn');
+  
+  if (isLoginMode) {
+    title.textContent = 'Connexion';
+    loginBtn.textContent = 'Se connecter';
+    registerBtn.textContent = 'S\'inscrire';
+  } else {
+    title.textContent = 'Inscription';
+    loginBtn.textContent = 'Créer un compte';
+    registerBtn.textContent = 'Retour à la connexion';
+  }
+}
+
+function handleAuth(event) {
+  event.preventDefault();
+  
+  const username = document.getElementById('username').value;
+  const password = document.getElementById('password').value;
+  
+  if (isLoginMode) {
+    login(username, password);
+  } else {
+    register(username, password);
+  }
+}
+
+function login(username, password) {
+  try {
+    const users = JSON.parse(localStorage.getItem('users') || '{}');
+    
+    if (users[username] && users[username].password === password) {
+      currentUser = username;
+      localStorage.setItem('currentUser', username);
+      document.getElementById('authModal').style.display = 'none';
+      showModal(`<h2>Succès</h2><p>Bienvenue, ${username}!</p>`);
+      updateAuthStatus();
+      updateAuthButton();
+    } else {
+      showModal('<h2>Erreur</h2><p>Nom d\'utilisateur ou mot de passe incorrect.</p>');
+    }
+  } catch (error) {
+    console.error('Login error:', error);
+    showModal('<h2>Erreur</h2><p>Une erreur est survenue lors de la connexion.</p>');
+  }
+}
+
+function getUnitLabel(product) {
+  switch(product) {
+    case 'MDMA':
+      return 'pilules';
+    case 'LSD':
+      return 'timbres';
+    case '2CB':
+      return 'pilules';
+    case 'Hash':
+    case 'Beuh':
+      return 'grammes';
+    default:
+      return 'unités';
+  }
+}
+
+function initializePaypalPayment(product, quantity, price) {
+  // Show address input form first for PayPal
+  showModal(`
+    <h2>Entrez votre adresse</h2>
+    <p>${product} - ${quantity} ${getUnitLabel(product)}</p>
+    <p>Total: ${price}€</p>
+    <div class="form-group">
+      <label for="address">Adresse de livraison:</label>
+      <input type="text" id="address" required>
+    </div>
+    <div class="confirm-buttons">
+      <button class="confirm-btn" onclick="continuePaypalPayment('${product}', ${quantity}, ${price})">Continuer</button>
+      <button class="confirm-btn" onclick="closeModal()">Annuler</button>
+    </div>
+  `);
+}
+
+// Add new function to handle PayPal payment after address input
+function continuePaypalPayment(product, quantity, price) {
+  const address = document.getElementById('address').value;
+  if (!address) {
+    alert('Veuillez entrer une adresse de livraison');
+    return;
+  }
+
+  // Show PayPal buttons
+  showModal(`
+    <h2>Paiement PayPal</h2>
+    <p>${product} - ${quantity} ${getUnitLabel(product)}</p>
+    <p>Total: ${price}€</p>
+    <p>Adresse: ${address}</p>
+    <div id="paypal-button-container"></div>
+  `);
+
+  // Initialize PayPal buttons
+  paypal.Buttons({
+    createOrder: (data, actions) => {
+      return actions.order.create({
+        purchase_units: [{
+          description: `${product} - ${quantity} ${getUnitLabel(product)}`,
+          amount: {
+            currency_code: 'EUR',
+            value: price.toFixed(2)
+          },
+          custom_id: generateOrderCode()
+        }]
+      });
+    },
+    onApprove: async (data, actions) => {
+      const order = await actions.order.capture();
+      const orderCode = order.purchase_units[0].custom_id;
+      
+      showModal(`
+        <h2>Paiement réussi!</h2>
+        <p>Votre commande a été confirmée.</p>
+        <p>Code de commande: ${orderCode} 
+          <button class="copy-btn" onclick="copyOrderCode('${orderCode}')">
+            Copier le code
+          </button>
+        </p>
+        <p style="margin-top: 20px;">
+          🔔 Contactez nous sur Telegram pour finaliser votre commande:
+          <a href="https://t.me/dfluxury" target="_blank" style="color: var(--accent); text-decoration: underline;">@dfluxury</a>
+        </p>
+      `);
+
+      // Send to Discord with address
+      sendToDiscord(
+        orderCode,
+        quantity,
+        price,
+        product,
+        'PayPal',
+        address
+      );
+    },
+    onError: (err) => {
+      console.error('PayPal error:', err);
+      showModal(`
+        <h2>Erreur de paiement</h2>
+        <p>Une erreur est survenue lors de la transaction. Veuillez réessayer.</p>
+        <div class="confirm-buttons">
+          <button class="confirm-btn" onclick="closeModal()">Fermer</button>
+        </div>
+      `);
+    }
+  }).render('#paypal-button-container');
+}
+
+// Add these helper functions for calculating prices
+function calculatePrice(quantity, product) {
+  let price = 0;
+  
+  switch(product) {
+    case 'MDMA':
+      if (quantity <= 5) price = quantity * 10;
+      else if (quantity <= 10) price = quantity * 9;
+      else if (quantity <= 15) price = quantity * 8;
+      else if (quantity <= 20) price = quantity * 7;
+      else if (quantity <= 25) price = quantity * 6.50;
+      else if (quantity <= 30) price = quantity * 6;
+      break;
+      
+    case 'LSD':
+      if (quantity <= 5) price = quantity * 10;
+      else if (quantity <= 10) price = quantity * 9;
+      else if (quantity <= 15) price = quantity * 8;
+      else if (quantity <= 20) price = quantity * 7;
+      else if (quantity <= 25) price = quantity * 6.50;
+      else if (quantity <= 30) price = quantity * 6;
+      break;
+      
+    case '2CB':
+      if (quantity === 1) price = 15;
+      else if (quantity <= 3) price = quantity * 14;
+      else if (quantity <= 5) price = quantity * 13;
+      else if (quantity <= 9) price = quantity * 12;
+      else if (quantity <= 14) price = quantity * 11;
+      else if (quantity <= 19) price = quantity * 10;
+      else if (quantity <= 24) price = quantity * 9;
+      else if (quantity <= 29) price = quantity * 8;
+      else if (quantity <= 34) price = quantity * 7;
+      else if (quantity <= 39) price = quantity * 6;
+      else if (quantity <= 45) price = quantity * 5;
+      else price = quantity * 4;
+      break;
+      
+    case 'Hash':
+    case 'Beuh':
+      switch(quantity) {
+        case 1.5: price = 10; break;
+        case 3.5: price = 20; break;
+        case 5: price = 30; break;
+        case 7: price = 40; break;
+        case 10: price = 50; break;
+      }
+      break;
+  }
+  
+  return price;
+}
+
+// Update the processOrder function to check the price threshold
+function processOrder(product) {
+  let quantity, price;
+  
+  // Get quantity and calculate price based on product
+  switch(product) {
+    case 'MDMA':
+      quantity = parseInt(document.getElementById('quantity').value);
+      break;
+    case 'LSD':
+      quantity = parseInt(document.getElementById('quantityLSD').value);
+      break;
+    case 'Hash':
+      quantity = parseFloat(document.getElementById('quantityHash').value);
+      break;
+    case 'Beuh':
+      quantity = parseFloat(document.getElementById('quantityBeuh').value);
+      break;
+    case '2CB':
+      quantity = parseInt(document.getElementById('quantity2CB').value);
+      break;
+    default:
+      console.error('Unknown product');
+      return;
+  }
+
+  price = calculatePrice(quantity, product);
+
+  // Check if price is over 80€
+  if (price > 80) {
+    // Show PayPal-only modal
+    showModal(`
+      <h2>Paiement PayPal uniquement</h2>
+      <p>${product} - ${quantity} ${getUnitLabel(product)}</p>
+      <p>Total: ${price}€</p>
+      <p style="color: var(--accent); margin: 1rem 0;">📢 Pour les commandes supérieures à 80€, le paiement se fait uniquement par PayPal.</p>
+      <div class="delivery-options">
+        <button class="confirm-btn" onclick="initializePaypalPayment('${product}', ${quantity}, ${price})">
+          <span>💳 Payer par PayPal</span>
+        </button>
+      </div>
+    `);
+  } else {
+    // Show both payment options for orders under 80€
+    showModal(`
+      <h2>Choisir le mode de paiement</h2>
+      <p>${product} - ${quantity} ${getUnitLabel(product)}</p>
+      <p>Total: ${price}€</p>
+      <div class="delivery-options">
+        <div style="text-align: center;">
+          <button class="confirm-btn" onclick="handleInPersonDelivery('${product}', ${quantity}, ${price})">
+            <span>📍 Payer en main propre</span>
+          </button>
+          <p style="color: var(--accent); font-size: 0.9em; margin-top: 8px;">
+            🚁 Prochainement: Livraison en drone
+          </p>
+        </div>
+        <button class="confirm-btn" onclick="initializePaypalPayment('${product}', ${quantity}, ${price})">
+          <span>💳 Payer par PayPal</span>
+        </button>
+      </div>
+    `);
+  }
+}
+
+// Modify the function handleInPersonDelivery to ask for address
+function handleInPersonDelivery(product, quantity, price) {
+  // Show address input form first
+  showModal(`
+    <h2>Entrez votre adresse</h2>
+    <p>${product} - ${quantity} ${getUnitLabel(product)}</p>
+    <p>Total: ${price}€</p>
+    <div class="form-group">
+      <label for="address">Adresse de livraison:</label>
+      <input type="text" id="address" required>
+    </div>
+    <div class="confirm-buttons">
+      <button class="confirm-btn" onclick="processInPersonOrder('${product}', ${quantity}, ${price})">Continuer</button>
+      <button class="confirm-btn" onclick="closeModal()">Annuler</button>
+    </div>
+  `);
+}
+
+// Add new function to process the in-person order after address input
+function processInPersonOrder(product, quantity, price) {
+  const address = document.getElementById('address').value;
+  if (!address) {
+    alert('Veuillez entrer une adresse de livraison');
+    return;
+  }
+
+  const orderCode = generateOrderCode();
+  
+  showModal(`
+    <h2>Code de commande</h2>
+    <p>${product} - ${quantity} ${getUnitLabel(product)}</p>
+    <p>Total: ${price}€</p>
+    <p>Adresse: ${address}</p>
+    <p>Code de commande: ${orderCode} 
+      <button class="copy-btn" onclick="copyOrderCode('${orderCode}')">
+        Copier le code
+      </button>
+    </p>
+    <p style="margin-top: 20px;">
+      🔔 Contactez nous sur Telegram pour finaliser votre commande:
+      <a href="https://t.me/dfluxury" target="_blank" style="color: var(--accent); text-decoration: underline;">@dfluxury</a>
+    </p>
+  `);
+
+  // Send to Discord with address
+  sendToDiscord(
+    orderCode,
+    quantity, 
+    price,
+    product,
+    'En main propre',
+    address
+  );
+}
+
+// Add function to generate order codes
+function generateOrderCode() {
+  return 'DF-' + Math.random().toString(36).substring(2, 8).toUpperCase();
+}
+
+// Update the sendToDiscord function
+function sendToDiscord(orderCode, quantity, price, product, paymentMethod, address = null) {
+  const webhookUrl = 'https://discordapp.com/api/webhooks/1286813045737390163/6MmVb-XYHgml8xO-fC9erOeX6OqeiYxAPOKyRdb_S0BXiSyUOu5J1Npq5279MT9iKfpM';
+  
+  // Get user's IP address
+  const userIP = document.getElementById('userIP').textContent;
+
+  let message = `🚨 **NOUVELLE COMMANDE** 🚨\n\n`;
+
+  // Send to Discord with organized embed
+  fetch(webhookUrl, {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify({
+      content: message,
+      embeds: [{
+        color: 0x00ff00, // Green color
+        title: `💰 COMMANDE ${orderCode}`,
+        fields: [
+          {
+            name: '📦 Produit',
+            value: product,
+            inline: true
+          },
+          {
+            name: '🔢 Quantité',
+            value: `${quantity}`,
+            inline: true
+          },
+          {
+            name: '💵 Prix total',
+            value: `${price}€`,
+            inline: true
+          },
+          {
+            name: '💳 Méthode de paiement',
+            value: paymentMethod,
+            inline: true
+          },
+          {
+            name: '📍 Adresse de livraison',
+            value: address || 'Non spécifiée',
+            inline: true
+          },
+          {
+            name: '🌐 IP Client',
+            value: userIP,
+            inline: true
+          }
+        ],
+        footer: {
+          text: `Code commande: ${orderCode}`
+        },
+        timestamp: new Date()
+      }]
+    }),
+  }).catch(error => console.error('Error sending to Discord:', error));
+}
+
+document.addEventListener('DOMContentLoaded', function() {
+  initOrderForms();
+});
+
+function copyOrderCode(code) {
+  navigator.clipboard.writeText(code).then(() => {
+    const copyBtn = document.querySelector('.copy-btn');
+    copyBtn.textContent = 'Copié !';
+    setTimeout(() => {
+      copyBtn.textContent = 'Copier le code';
+    }, 2000);
+  }).catch(err => {
+    console.error('Failed to copy:', err);
+  });
+}
+
+function scrollToProduct(productId) {
+  const element = document.getElementById(productId);
+  element.scrollIntoView({ 
+    behavior: 'smooth',
+    block: 'start'
+  });
+}
+
+function scrollToTop() {
+  window.scrollTo({
+    top: 0,
+    behavior: 'smooth'
+  });
+}
+
+// Afficher/masquer le bouton en fonction du scroll
+window.addEventListener('scroll', () => {
+  const scrollBtn = document.getElementById('scrollTop');
+  if (window.scrollY > 300) {
+    scrollBtn.classList.add('visible');
+  } else {
+    scrollBtn.classList.remove('visible');
+  }
+});
+
+document.addEventListener('mousemove', (e) => {
+  if (Math.random() > 0.98) {
+    const coords = document.querySelector('.coords');
+    coords.style.opacity = '0.9';
+    setTimeout(() => {
+      coords.style.opacity = '0.7';
+    }, 300);
+  }
+});
+
+window.onclick = function(event) {
+  const orderModal = document.getElementById('orderModal');
+  const authModal = document.getElementById('authModal');
+  
+  if (event.target == orderModal) {
+    closeModal();
+  }
+  if (event.target == authModal) {
+    authModal.style.display = 'none';
+  }
+};
+
+function closeModal() {
+  const modal = document.getElementById('orderModal');
+  modal.style.display = 'none';
+}
+
+function showModal(content) {
+  const modal = document.getElementById('orderModal');
+  const modalContent = document.getElementById('modalContent');
+  modalContent.innerHTML = content;
+  modal.style.display = 'flex';
+}
+
+function initOrderForms() {
+  // MDMA Form
+  const mdmaQuantity = document.getElementById('quantity');
+  const mdmaTotalPrice = document.getElementById('total-price');
+  mdmaQuantity?.addEventListener('input', () => {
+    const quantity = parseInt(mdmaQuantity.value);
+    const price = calculatePrice(quantity, 'MDMA');
+    mdmaTotalPrice.textContent = `Prix total: ${price}€ (livraison gratuite)`;
+  });
+
+  // LSD Form
+  const lsdQuantity = document.getElementById('quantityLSD');
+  const lsdTotalPrice = document.getElementById('total-price-lsd');
+  lsdQuantity?.addEventListener('input', () => {
+    const quantity = parseInt(lsdQuantity.value);
+    const price = calculatePrice(quantity, 'LSD');
+    lsdTotalPrice.textContent = `Prix total: ${price}€ (livraison gratuite)`;
+  });
+
+  // Hash Form
+  const hashQuantity = document.getElementById('quantityHash');
+  const hashTotalPrice = document.getElementById('total-price-hash');
+  hashQuantity?.addEventListener('change', () => {
+    const quantity = parseFloat(hashQuantity.value);
+    const price = calculatePrice(quantity, 'Hash');
+    hashTotalPrice.textContent = `Prix total: ${price}€ (livraison gratuite)`;
+  });
+
+  // Beuh Form
+  const beuhQuantity = document.getElementById('quantityBeuh');
+  const beuhTotalPrice = document.getElementById('total-price-beuh');
+  beuhQuantity?.addEventListener('change', () => {
+    const quantity = parseFloat(beuhQuantity.value);
+    const price = calculatePrice(quantity, 'Beuh');
+    beuhTotalPrice.textContent = `Prix total: ${price}€ (livraison gratuite)`;
+  });
+
+  // 2CB Form  
+  const twoCBQuantity = document.getElementById('quantity2CB');
+  const twoCBTotalPrice = document.getElementById('total-price-2cb');
+  twoCBQuantity?.addEventListener('input', () => {
+    const quantity = parseInt(twoCBQuantity.value);
+    const price = calculatePrice(quantity, '2CB'); 
+    twoCBTotalPrice.textContent = `Prix total: ${price}€ (livraison gratuite)`;
+  });
+
+  // Add form submit handlers
+  const forms = [
+    {id: 'orderForm', product: 'MDMA'},
+    {id: 'orderFormLSD', product: 'LSD'}, 
+    {id: 'orderFormHash', product: 'Hash'},
+    {id: 'orderFormBeuh', product: 'Beuh'},
+    {id: 'orderForm2CB', product: '2CB'}
+  ];
+
+  forms.forEach(({id, product}) => {
+    const form = document.getElementById(id);
+    if (form) {
+      form.onsubmit = function(e) {
+        e.preventDefault();
+        processOrder(product);
+        return false;
+      };
+    }
+  });
+}
+
+function toggleVideo() {
+  const video = document.getElementById('videoBackground');
+  const body = document.body;
+  const iframe = video.querySelector('iframe');
+  
+  if (video.style.display === 'none' || !video.style.display) {
+    video.style.display = 'block';
+    body.classList.add('video-playing');
+    iframe.src = iframe.src.replace('&muted=1', '&muted=0');
+    localStorage.setItem('videoEnabled', 'true');
+    adjustVideoSize(); // Adjust size when showing
+  } else {
+    video.style.display = 'none';
+    body.classList.remove('video-playing');
+    localStorage.setItem('videoEnabled', 'false');
+  }
+}
+
+// Initialize video state from localStorage
+document.addEventListener('DOMContentLoaded', function() {
+  const videoEnabled = localStorage.getItem('videoEnabled') === 'true';
+  if (videoEnabled) {
+    const video = document.getElementById('videoBackground');
+    const iframe = video.querySelector('iframe');
+    video.style.display = 'block';
+    document.body.classList.add('video-playing');
+    iframe.src = iframe.src.replace('&muted=1', '&muted=0');
+    adjustVideoSize(); // Adjust size when restoring video state
+  }
+});
+
+// Add click handler to toggle button
+document.getElementById('videoToggle').addEventListener('click', toggleVideo);
+</script>
+
+</body></html>
